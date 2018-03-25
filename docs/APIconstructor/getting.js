@@ -11,6 +11,16 @@ var client = new elasticsearch.Client({
   log: 'trace'
 });
 
+client.ping({
+    requestTimeout: 30000,
+  }, function (error) {
+    if (error) {
+      console.error('elasticsearch cluster is down!');
+    } else {
+      console.log('Everything is ok');
+    }
+  });
+
 async function exportElasticsearch(){
     console.log("Launch...");
 
@@ -29,6 +39,5 @@ async function exportElasticsearch(){
     //console.log("JSON file created");
     client.bulk({"body":modeles}, function(err, resp){});
 }
-
 
 exports.insertElastic = exportElasticsearch();
