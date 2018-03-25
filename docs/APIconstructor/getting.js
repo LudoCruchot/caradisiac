@@ -3,6 +3,7 @@
 const {getBrands} = require('node-car-api');
 const {getModels} = require('node-car-api');
 
+const express = require('express');
 var fs = require('fs');
 
 var elasticsearch = require('elasticsearch');
@@ -11,15 +12,6 @@ var client = new elasticsearch.Client({
   log: 'trace'
 });
 
-client.ping({
-    requestTimeout: 30000,
-  }, function (error) {
-    if (error) {
-      console.error('elasticsearch cluster is down!');
-    } else {
-      console.log('Everything is ok');
-    }
-  });
 
 async function exportElasticsearch(){
     console.log("Launch...");
@@ -37,7 +29,18 @@ async function exportElasticsearch(){
     };
     //fs.writeFileSync('cars.json', JSON.stringify(modeles),'UTF-8');
     //console.log("JSON file created");
-    client.bulk({"body":modeles}, function(err, resp){});
+    //client.bulk({"body":modeles}, function(err, resp){});
+    client.bulk({
+        body: modeles
+    },function(error, response){
+        if(error){
+            console.log("TEST "+error);
+            return;
+        }
+        else{
+            console.log(response);
+        }
+    });
 }
 
 exports.insertElastic = exportElasticsearch();
