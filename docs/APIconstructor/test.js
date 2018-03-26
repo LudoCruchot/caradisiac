@@ -56,6 +56,12 @@ async function exportElasticsearch(){
         }
     });
 
+
+    // routes
+
+    
+
+
     // route /populate
     app.get('/populate',(req,res)=>{
         populate
